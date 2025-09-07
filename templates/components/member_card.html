@@ -1,0 +1,30 @@
+<div class="col-lg-4 col-md-6">
+    <div class="member-card card h-100 shadow-sm">
+        <div class="card-body text-center p-4">
+            <div class="member-avatar mb-3">
+                <img src="{{ member.Image }}" alt="{{ member.Name }}" 
+                     class="rounded-circle" 
+                     onerror="this.src='https://via.placeholder.com/120x120/6c757d/ffffff?text={{ member.Name[0] }}'">
+            </div>
+            
+            <h5 class="card-title mb-2">{{ member.Name }}</h5>
+            <p class="text-muted mb-2">{{ member.Title }}</p>
+            <p class="small text-secondary mb-3">{{ member.Organization }}</p>
+            
+            <div class="location-info mb-3">
+                <span class="flag">{{ member.flag }}</span>
+                <span class="country">{{ member.Country }}</span>
+            </div>
+            
+            <div class="d-flex justify-content-center align-items-center gap-3">
+                <a href="{{ member.Linkedin }}" target="_blank" class="linkedin-link">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/960px-LinkedIn_logo_initials.png" 
+                         alt="LinkedIn" class="linkedin-icon">
+                </a>
+                <button class="btn btn-dark btn-sm" onclick="openMemberModal({{ loop.index0 }})">
+                    View Profile
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="header-section mb-5">
+        <h1 class="display-4 fw-bold text-center">ABG Alumni Directory</h1>
+        <p class="lead text-center text-muted">Get to know fellow members across the ABG Alumni network. All information is private and for members only.</p>
+    </div>
+
+    <!-- Search Interface -->
+    <div class="search-section mb-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title mb-4">
+                    <i class="bi bi-search"></i> Search Members
+                </h5>
+                
+                <div class="row g-3">
+                    <!-- Name Search -->
+                    <div class="col-md-4">
+                        <label for="searchName" class="form-label">Name</label>
+                        <input type="text" class="form-control search-input" id="searchName" placeholder="Search by name...">
+                    </div>
+                    
+                    <!-- City Search -->
+                    <div class="col-md-4">
+                        <label for="searchCity" class="form-label">City</label>
+                        <select class="form-select search-input" id="searchCity">
+                            <option value="">All Cities</option>
+                            {% for city in cities %}
+                            <option value="{{ city }}">{{ city }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Country Search -->
+                    <div class="col-md-4">
+                        <label for="searchCountry" class="form-label">Country</label>
+                        <select class="form-select search-input" id="searchCountry">
+                            <option value="">All Countries</option>
+                            {% for country in countries %}
+                            <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Class Search -->
+                    <div class="col-md-4">
+                        <label for="searchClass" class="form-label">Class</label>
+                        <select class="form-select search-input" id="searchClass">
+                            <option value="">All Classes</option>
+                            {% for class in classes %}
+                            <option value="{{ class }}">{{ class }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Title Search -->
+                    <div class="col-md-4">
+                        <label for="searchTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control search-input" id="searchTitle" placeholder="Search by title...">
+                    </div>
+                    
+                    <!-- Industry Search -->
+                    <div class="col-md-4">
+                        <label for="searchIndustry" class="form-label">Industry</label>
+                        <select class="form-select search-input" id="searchIndustry">
+                            <option value="">All Industries</option>
+                            {% for industry in industries %}
+                            <option value="{{ industry }}">{{ industry }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-outline-secondary" id="clearFilters">
+                            <i class="bi bi-x-circle"></i> Clear All Filters
+                        </button>
+                        <span class="ms-3" id="resultsCounter">Showing {{ members|length }} of {{ members|length }} members</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4" id="membersGrid">
+        {% for member in members %}
+            <div class="col-lg-4 col-md-6">
+                <div class="member-card card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="member-avatar mb-3">
+                            <img src="{{ member.Image }}" alt="{{ member.Name }}" 
+                                 class="rounded-circle" 
+                                 onerror="this.src='https://via.placeholder.com/120x120/6c757d/ffffff?text={{ member.Name[0] }}'">
+                        </div>
+                        
+                        <h5 class="card-title mb-2">{{ member.Name }}</h5>
+                        <p class="text-muted mb-2">{{ member.Title }}</p>
+                        <p class="small text-secondary mb-3">{{ member.Organization }}</p>
+                        
+                        <div class="location-info mb-3">
+                            <span class="flag">{{ member.flag }}</span>
+                            <span class="city">{{ member.City }}</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-center align-items-center gap-3">
+                            <a href="{{ member.Linkedin }}" target="_blank" class="linkedin-link">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/960px-LinkedIn_logo_initials.png" 
+                                     alt="LinkedIn" class="linkedin-icon">
+                            </a>
+                            <button class="btn btn-dark btn-sm" onclick="openMemberModal({{ loop.index0 }})">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Member Detail Modal -->
+<div class="modal fade" id="memberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalMemberName"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <img id="modalMemberImage" src="" alt="" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-8">
+                        <h6 class="text-muted">Position</h6>
+                        <p id="modalMemberTitle" class="mb-3"></p>
+                        
+                        <h6 class="text-muted">Organization</h6>
+                        <p id="modalMemberOrg" class="mb-3"></p>
+                        
+                        <h6 class="text-muted">Industry</h6>
+                        <p id="modalMemberIndustry" class="mb-3"></p>
+                        
+                        <h6 class="text-muted">Location</h6>
+                        <p id="modalMemberLocation" class="mb-3"></p>
+                        
+                        <h6 class="text-muted">Class</h6>
+                        <p id="modalMemberClass" class="mb-3"></p>
+                        
+                        <div class="mt-4">
+                            <a id="modalLinkedIn" href="" target="_blank" class="btn btn-primary">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/960px-LinkedIn_logo_initials.png" 
+                                     alt="LinkedIn" style="width: 20px; height: 20px; margin-right: 8px;">
+                                Connect on LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
