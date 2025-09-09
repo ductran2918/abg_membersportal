@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 def load_member_data():
     """Load member data from CSV file"""
-    csv_path = os.path.join('data', 'members.csv')
+    csv_path = os.path.join('data', 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTRr1k0NqIievUlo3BU84irBXwNtAOv_cpNY5cu1KSVMl4FzzHpQ63mUqo5J8ToylfCf9cgOfzeU3xz/pub?gid=0&single=true&output=csv')
     try:
         df = pd.read_csv(csv_path)
         return df.to_dict('records')
